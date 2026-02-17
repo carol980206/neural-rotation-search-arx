@@ -46,7 +46,7 @@ For a rotation parameter choice $θ$ and $r$-round cipher $E^r_θ$:
 
 ├── model.py                     # Residual neural network architecture definition
 
-├── neural_evaluator.py          # f_hat implementations: $\mathcal{ND}$ and $\mathcal{JND}$ training pipelines
+├── neural_evaluator.py          # f_hat implementations: $ND$ and $JND$ training pipelines
 
 ├── param_search_algorithm.py    # Greedy-with-exploration parameter search algorithm
 
