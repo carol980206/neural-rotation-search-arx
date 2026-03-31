@@ -1,3 +1,6 @@
+'''
+Source code from https://github.com/CryptAnalystDesigner/MutipleCipherDesChaskeyPresent.git
+'''
 import numpy as np
 from os import urandom
 from copy import deepcopy
@@ -134,15 +137,6 @@ class Chaskey(object):
         rks = self.expand_key(k, nr)
         cl0, cl1, cl2, cl3 = self.encrypt((pl0, pl1, pl2, pl3), rks)
         cr0, cr1, cr2, cr3 = self.encrypt((pr0, pr1, pr2, pr3), rks)
-        
-        cl2 = self.ror((self.ror(cl1, self.c[2]) ^ cl2), self.c[0])
-        cl1 = self.ror(cl1, self.c[2])
-        cl0 = self.ror((cl3 ^ cl0), self.c[1])
-        
-        cr2 = self.ror((self.ror(cr1, self.c[2]) ^ cr2), self.c[0])
-        cr1 = self.ror(cr1, self.c[2])
-        cr0 = self.ror((cr3 ^ cr0), self.c[1])
-        
         if data_form == 'only_diff':
             d0, d1, d2, d3 = cl0 ^ cr0, cl1 ^ cr1, cl2 ^ cr2, cl3 ^ cr3
             X = [d0, d1, d2, d3]

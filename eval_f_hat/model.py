@@ -1,3 +1,6 @@
+'''
+Source code from https://github.com/agohr/deep_speck.git
+'''
 import numpy as np
 import os
 from ciphers.cipher import Cipher

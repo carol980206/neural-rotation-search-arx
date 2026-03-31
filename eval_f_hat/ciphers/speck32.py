@@ -1,3 +1,6 @@
+'''
+Source code from https://github.com/agohr/deep_speck.git
+'''
 import numpy as np
 from os import urandom
 

@@ -33,7 +33,7 @@ class greedyOptimizerWithExploration(Search):
         try_num = 0
         l = 0
         if debug_verbose:
-            print(f"[Iteration index: 0] Params: {best_params}. Val: {best_val}")
+            print(f"[Iteration index: 0] Params: {best_params}. Val: {best_val * 2 - 1}")
         while try_num < self.N:
             n = (l % self.time) + 1
             l += 1
@@ -55,7 +55,7 @@ class greedyOptimizerWithExploration(Search):
 
                 new_val = self.f(Cipher(self.cipher_name, new_params))
                 if debug_verbose:
-                    print(f"[Iteration index: {try_num}] Testing params: {new_params}. Val is {new_val}.")
+                    print(f"[Iteration index: {try_num}] Testing params: {new_params}. Val is {new_val * 2 - 1}.")
                 if new_val < best_val:
                     best_val = new_val
                     best_params = copy(new_params)
@@ -68,7 +68,7 @@ class greedyOptimizerWithExploration(Search):
 
                 # Print log
                 if debug_verbose:
-                    print(f"[Iteration index: {try_num}] Params: {guess_params} and val: {val}. Best params: {best_params} and best val: {best_val}.")
+                    print(f"[Iteration index: {try_num}] Params: {guess_params} and val: {val * 2 - 1}. Best params: {best_params} and best val: {best_val * 2 - 1}.")
                 
                 # Determine whether the early stop condition is met
                 if best_val < early_stop_val:

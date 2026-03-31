@@ -110,7 +110,6 @@ class Siphash(object):
         pr[Y == 0] = np.frombuffer(urandom(8 * num_rand_samples), dtype=np.uint64)
         rks = self.expand_key(k, nr)
         rks["k0"], rks["k1"] = k, k1
-
         cl = self.encrypt(pl, rks)
         cr = self.encrypt(pr, rks)
         if data_form == 'only_diff':

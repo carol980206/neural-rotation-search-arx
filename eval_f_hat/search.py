@@ -62,7 +62,7 @@ if __name__ == '__main__':
         best_params, best_val = searcher.search(init_params)
         end = time.perf_counter()
     
-        print(f"Best params: {best_params}. Best val: {best_val}.")
+        print(f"Best params: {best_params}. Best val: {best_val * 2 - 1}.")
         print(f"Search time: {round(end - start, 2)} s.")
         print(f"Simple evaluating times: {simple_evaluator.count}.")
     
@@ -71,11 +71,11 @@ if __name__ == '__main__':
         M = 10
         sorted_values = simple_evaluator.get_best_k_values(M)
         for x in sorted_values:
-            print(f"Params: {x[0]}. Value: {x[1]} ")
+            print(f"Params: {x[0]}. Value: {x[1] * 2 - 1} ")
 
         output_file = open(f"./{cipher_name}_search_results-{num_rounds}r.txt", mode='a')
         output_file.write("New search trial:\n")
         for x in sorted_values:
-            output_file.write(f"Params: {x[0]}. Value: {x[1]} \n")
+            output_file.write(f"Params: {x[0]}. Value: {x[1] * 2 - 1} \n")
         output_file.write('\n')
         output_file.close()
