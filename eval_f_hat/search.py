@@ -1,3 +1,10 @@
+import os
+# Must be set before tensorflow is imported (it is read when the GPU device initializes).
+# Cap the pinned host-memory pool used for host-to-device staging; without this the
+# pool grows lazily and is never returned to the OS (up to 64GB by default).
+os.environ.setdefault("TF_GPU_HOST_MEM_LIMIT_IN_MB", "2048")
+os.environ.setdefault("TF_FORCE_GPU_ALLOW_GROWTH", "true")
+
 import sys
 import time
 import random

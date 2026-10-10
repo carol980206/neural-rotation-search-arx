@@ -134,15 +134,18 @@ class Cipher(object):
         return self.cipher_engine.encrypt(p, rks)
     
     def make_train_data_multidiff(self, n, nr, diffs, data_form):
-        Xs = []
         Y = np.frombuffer(urandom(n), dtype=np.uint8) & 0x1
-        for diff in diffs:
+        width = self.WORD_NUM * self.WORD_SIZE
+        # Preallocate the final buffer and fill it diff by diff; building a list of
+        # per-diff arrays and concatenating them afterwards would transiently need
+        # twice the final data size in host memory.
+        Xs = np.empty((n, width * len(diffs)), dtype=np.uint8)
+        for j, diff in enumerate(diffs):
             gc.collect()
             p = self.make_plaintexts(n)
             rks = self.make_rks(n, nr)
-            Xs.append(self.make_train_data_from_given_sample(p, rks, Y, diff, data_form))
+            Xs[:, j * width:(j + 1) * width] = self.make_train_data_from_given_sample(p, rks, Y, diff, data_form)
             del p; del rks
-        Xs = np.concatenate(Xs, axis=1)
         return Xs, Y
 
     def make_train_data_from_given_sample(self, p, rk, Y, diff, data_form):

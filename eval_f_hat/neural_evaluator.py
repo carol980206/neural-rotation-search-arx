@@ -1,4 +1,6 @@
 import numpy as np
+import gc
+from keras import backend as K
 from keras.callbacks import LearningRateScheduler
 from ciphers.cipher import Cipher
 from eval_diff_score import get_good_diff, get_random_bias_for_reference
@@ -32,7 +34,13 @@ def select_best_diff_index(cipher: Cipher, diff_indexes, num_rounds):
     diffs = gen_diffs(diff_indexes, cipher.WORD_SIZE, cipher.WORD_NUM)
     model = multidiff_net_train(cipher, 5, num_rounds, diffs, 5000, 10**7, 'only_diff', False)
     diff_importance = detect_diff_importance(model, cipher, diff_indexes, 10**6, num_rounds)
-    return diff_indexes[np.argmax(diff_importance)]
+    best_index = diff_indexes[np.argmax(diff_importance)]
+    # Release the model and every tensor/graph keras captured for it, otherwise the
+    # traced train/test functions keep the training tensors resident (TF 2.4 leak family).
+    del model, diff_importance
+    gc.collect()
+    K.clear_session()
+    return best_index
 
 def get_top_input_diffs(cipher: Cipher, T: int, num_rounds):
     if cipher.cipher_name == 'speck128':
@@ -86,4 +94,9 @@ def train_with_good_diff(cipher: Cipher, num_epochs: int, num_rounds, T: int, bs
         del X, Y, X_eval, Y_eval
     acc = np.max(h.history['val_acc'])
     print("This try acc is", acc)
+    # Release the trained network together with the graphs/tensors keras captured for
+    # it so that the next parameter evaluation starts from a clean slate.
+    del net, h, lr
+    gc.collect()
+    K.clear_session()
     return acc
